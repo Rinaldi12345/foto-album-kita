@@ -19,8 +19,11 @@
     min-height: 100vh;
   }
 
+  /* Judul di tengah atas */
   h1 {
-    margin: 20px 0;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0; /* Jarak dari atas dan bawah */
     font-size: 3em;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   }
@@ -76,14 +79,15 @@
     background-color: #ff3b6b;
   }
 
-  /* Gallery styles */
+  /* Galeri container, awalnya tersembunyi */
   #galleryContainer {
-    display: none; /* Hidden until login success */
+    display: none; /* tampilkan setelah login berhasil */
     flex-direction: column;
     align-items: center;
     width: 100%;
   }
 
+  /* Galeri foto */
   .gallery {
     display: flex;
     flex-wrap: wrap;
@@ -116,7 +120,7 @@
     transition: filter 0.3s;
   }
 
-  /* Overlay for large photo */
+  /* Overlay besar untuk foto */
   .overlay {
     position: fixed;
     top: 0; left: 0;
@@ -141,7 +145,7 @@
     to {transform: scale(1);}
   }
 
-  /* Close button */
+  /* Tombol close foto besar */
   .close-btn {
     position: absolute;
     top: 40px;
@@ -160,7 +164,7 @@
 </head>
 <body>
 
-<!-- Login Overlay -->
+<!-- Overlay login -->
 <div id="loginOverlay">
   <div id="loginBox">
     <h2>Login untuk Melihat Album</h2>
@@ -170,11 +174,13 @@
   </div>
 </div>
 
-<!-- Kontainer Galeri -->
+<!-- Kontainer galeri -->
 <div id="galleryContainer">
+  <!-- Judul di tengah atas -->
   <h1>Galeri Cinta</h1>
+  <!-- Galeri foto -->
   <div class="gallery" id="gallery">
-    <!-- Foto-foto -->
+    <!-- Contoh foto -->
     <div class="photo"><img src="foto1.jpeg" alt="Foto 1"/></div>
     <div class="photo"><img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 2"/></div>
     <div class="photo"><img src="https://images.unsplash.com/photo-1502327030244-3b7680b7d5b8?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 3"/></div>
@@ -183,7 +189,7 @@
   </div>
 </div>
 
-<!-- Overlay untuk foto besar -->
+<!-- Overlay foto besar -->
 <div class="overlay" id="overlay">
   <span class="close-btn" id="closeBtn">&times;</span>
   <img src="" alt="Large Photo" id="largePhoto"/>
@@ -198,16 +204,16 @@
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
 
-    // Validasi sederhana (ubah sesuai keperluan)
-    if (username === 'della' && password === 'aldi') {
+    // Validasi login sederhana
+    if (username === 'pasangan' && password === 'sayang') {
       loginOverlay.style.display = 'none';
-      galleryContainer.style.display = 'block';
+      galleryContainer.style.display = 'flex';
     } else {
       alert('Username atau password salah!');
     }
   });
 
-  // Galeri foto
+  // Fungsi untuk menampilkan foto besar
   const galleryItems = document.querySelectorAll('.photo');
   const overlay = document.getElementById('overlay');
   const largePhoto = document.getElementById('largePhoto');
@@ -221,6 +227,7 @@
     });
   });
 
+  // Tutup overlay foto besar
   closeBtn.addEventListener('click', () => {
     overlay.style.display = 'none';
   });
