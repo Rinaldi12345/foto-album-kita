@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Galeri Cinta</title>
-<!-- Google Fonts untuk tampilan yang elegan -->
+<title>Galeri Cinta dengan Login</title>
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
   body {
@@ -23,6 +23,65 @@
     margin: 20px 0;
     font-size: 3em;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+
+  /* Login overlay styles */
+  #loginOverlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  #loginBox {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    max-width: 80%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  }
+
+  #loginBox h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #333;
+  }
+
+  #loginBox input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  #loginBox button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff6f91;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  #loginBox button:hover {
+    background-color: #ff3b6b;
+  }
+
+  /* Gallery styles */
+  #galleryContainer {
+    display: none; /* Hidden until login success */
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 
   .gallery {
@@ -57,19 +116,16 @@
     transition: filter 0.3s;
   }
 
-  /* Animasi overlay saat gambar di klik */
+  /* Overlay for large photo */
   .overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: rgba(0,0,0,0.8);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 999;
-    animation: fadeIn 0.5s forwards;
   }
 
   .overlay img {
@@ -80,17 +136,12 @@
     animation: zoomIn 0.5s;
   }
 
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-
   @keyframes zoomIn {
     from {transform: scale(0.8);}
     to {transform: scale(1);}
   }
 
-  /* Button Close */
+  /* Close button */
   .close-btn {
     position: absolute;
     top: 40px;
@@ -109,24 +160,54 @@
 </head>
 <body>
 
-<h1>Galeri Cinta</h1>
-<div class="gallery" id="gallery">
-  <!-- Foto-foto akan dimasukkan di sini -->
-  <div class="photo"><img src="foto1.jpeg" alt="Foto 1"/></div>
-  <div class="photo"><img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 2"/></div>
-  <div class="photo"><img src="https://images.unsplash.com/photo-1502327030244-3b7680b7d5b8?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 3"/></div>
-  <div class="photo"><img src="https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 4"/></div>
-  <!-- Tambahkan foto lainnya sesuai keinginan -->
+<!-- Login Overlay -->
+<div id="loginOverlay">
+  <div id="loginBox">
+    <h2>Login untuk Melihat Album</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button id="loginBtn">Login</button>
+  </div>
 </div>
 
-<!-- Overlay untuk menampilkan foto besar -->
+<!-- Kontainer Galeri -->
+<div id="galleryContainer">
+  <h1>Galeri Cinta</h1>
+  <div class="gallery" id="gallery">
+    <!-- Foto-foto -->
+    <div class="photo"><img src="foto1.jpeg" alt="Foto 1"/></div>
+    <div class="photo"><img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 2"/></div>
+    <div class="photo"><img src="https://images.unsplash.com/photo-1502327030244-3b7680b7d5b8?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 3"/></div>
+    <div class="photo"><img src="https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 4"/></div>
+    <!-- Tambahkan foto lainnya sesuai keinginan -->
+  </div>
+</div>
+
+<!-- Overlay untuk foto besar -->
 <div class="overlay" id="overlay">
   <span class="close-btn" id="closeBtn">&times;</span>
   <img src="" alt="Large Photo" id="largePhoto"/>
 </div>
 
 <script>
-  // JavaScript untuk interaksi galeri
+  // Cek login
+  const loginOverlay = document.getElementById('loginOverlay');
+  const galleryContainer = document.getElementById('galleryContainer');
+
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    // Validasi sederhana (ubah sesuai keperluan)
+    if (username === 'pasangan' && password === 'sayang') {
+      loginOverlay.style.display = 'none';
+      galleryContainer.style.display = 'block';
+    } else {
+      alert('Username atau password salah!');
+    }
+  });
+
+  // Galeri foto
   const galleryItems = document.querySelectorAll('.photo');
   const overlay = document.getElementById('overlay');
   const largePhoto = document.getElementById('largePhoto');
@@ -144,7 +225,6 @@
     overlay.style.display = 'none';
   });
 
-  // Klik di luar gambar juga tutup overlay
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       overlay.style.display = 'none';
