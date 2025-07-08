@@ -190,14 +190,13 @@
     max-width: 90%;
     max-height: 80%;
     border-radius: 20px;
-    display: none;
+    display: none; /* default hidden */
   }
-
   #largeVideo {
     max-width: 90%;
     max-height: 80%;
     border-radius: 20px;
-    display: none;
+    display: none; /* default hidden */
   }
 </style>
 </head>
@@ -256,7 +255,7 @@
 </div>
 
 <script>
-  // Cek login
+  // Login logic
   const loginOverlay = document.getElementById('loginOverlay');
   const galleryContainer = document.getElementById('galleryContainer');
 
@@ -272,23 +271,37 @@
     }
   });
 
-  // Fungsi untuk menampilkan foto/video besar
-  const mediaItems = document.querySelectorAll('.gallery .photo, #videos video');
+  // Media overlay logic
   const overlay = document.getElementById('overlay');
   const largePhoto = document.getElementById('largePhoto');
   const largeVideo = document.getElementById('largeVideo');
   const closeBtn = document.getElementById('closeBtn');
 
+  // Fungsi menutup overlay dan menghentikan media
+  function closeMedia() {
+    overlay.style.display = 'none';
+    largeVideo.pause();
+    largeVideo.src = ''; // reset video sumber
+    largePhoto.src = '';
+  }
+
+  // Tambahkan event untuk semua media
+  const mediaItems = document.querySelectorAll('.gallery .photo, #videos video');
+
   mediaItems.forEach(item => {
     item.addEventListener('click', () => {
+      // Matikan semua media yang sedang diputar
+      largeVideo.pause();
+      largeVideo.src = '';
+      largePhoto.src = '';
+
       if (item.tagName.toLowerCase() === 'img') {
-        // Foto
+        // Tampilkan gambar besar
         largePhoto.src = item.src;
         largePhoto.style.display = 'block';
         largeVideo.style.display = 'none';
-        largeVideo.pause();
       } else if (item.tagName.toLowerCase() === 'video') {
-        // Video
+        // Tampilkan video besar
         const src = item.getAttribute('data-video-src');
         largeVideo.src = src;
         largeVideo.style.display = 'block';
@@ -299,15 +312,14 @@
     });
   });
 
-  // Tutup overlay
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    overlay.style.display = 'none';
-    largeVideo.pause();
+  // Event untuk menutup overlay
+  closeBtn.addEventListener('click', () => {
+    closeMedia();
   });
+
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
-      overlay.style.display = 'none';
-      largeVideo.pause();
+      closeMedia();
     }
   });
 </script>
