@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Galeri Cinta dengan Login</title>
+<title>Galeri Cinta Kita</title>
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
@@ -167,7 +167,7 @@
 <!-- Overlay login -->
 <div id="loginOverlay">
   <div id="loginBox">
-    <h2>Login dulu ya Cantik</h2>
+    <h2>Login dulu ya Cantik &#128149;</h2>
     <input type="text" id="username" placeholder="Username" required />
     <input type="password" id="password" placeholder="Password" required />
     <button id="loginBtn">Login</button>
@@ -204,7 +204,7 @@
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
 
-    // Validasi login sederhana
+    // Validasi login sederhana 
     if (username === 'della' && password === 'aldi') {
       loginOverlay.style.display = 'none';
       galleryContainer.style.display = 'flex';
