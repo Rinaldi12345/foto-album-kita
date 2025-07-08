@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Galeri Cinta</title>
+<!-- Google Fonts untuk tampilan yang elegan -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pacifico', cursive;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  h1 {
+    margin: 20px 0;
+    font-size: 3em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1000px;
+  }
+
+  .photo {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .photo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 16px 24px rgba(0,0,0,0.4);
+  }
+
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s;
+  }
+
+  /* Animasi overlay saat gambar di klik */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    animation: fadeIn 0.5s forwards;
+  }
+
+  .overlay img {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    animation: zoomIn 0.5s;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes zoomIn {
+    from {transform: scale(0.8);}
+    to {transform: scale(1);}
+  }
+
+  /* Button Close */
+  .close-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 2em;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s;
+  }
+
+  .close-btn:hover {
+    color: #ffd700;
+  }
+</style>
+</head>
+<body>
+
+<h1>Galeri Cinta</h1>
+<div class="gallery" id="gallery">
+  <!-- Foto-foto akan dimasukkan di sini -->
+  <div class="photo"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 1"/></div>
+  <div class="photo"><img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 2"/></div>
+  <div class="photo"><img src="https://images.unsplash.com/photo-1502327030244-3b7680b7d5b8?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 3"/></div>
+  <div class="photo"><img src="https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 4"/></div>
+  <!-- Tambahkan foto lainnya sesuai keinginan -->
+</div>
+
+<!-- Overlay untuk menampilkan foto besar -->
+<div class="overlay" id="overlay">
+  <span class="close-btn" id="closeBtn">&times;</span>
+  <img src="" alt="Large Photo" id="largePhoto"/>
+</div>
+
+<script>
+  // JavaScript untuk interaksi galeri
+  const galleryItems = document.querySelectorAll('.photo');
+  const overlay = document.getElementById('overlay');
+  const largePhoto = document.getElementById('largePhoto');
+  const closeBtn = document.getElementById('closeBtn');
+
+  galleryItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const imgSrc = item.querySelector('img').src;
+      largePhoto.src = imgSrc;
+      overlay.style.display = 'flex';
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+
+  // Klik di luar gambar juga tutup overlay
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
