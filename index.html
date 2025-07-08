@@ -1,240 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Galeri Cinta dengan Login</title>
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Galeri Foto dan Video Terpisah</title>
 <style>
   body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Pacifico', cursive;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    margin: 20px;
   }
 
-  /* Judul di tengah atas */
-  h1 {
-    width: 100%;
+  /* Container utama */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* Judul bagian */
+  h2 {
     text-align: center;
-    margin: 20px 0; /* Jarak dari atas dan bawah */
-    font-size: 3em;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   }
 
-  /* Login overlay styles */
-  #loginOverlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  /* Bagian foto dan video */
+  .section {
+    margin-top: 30px;
   }
 
-  #loginBox {
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
-    width: 300px;
-    max-width: 80%;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  /* Judul masing-masing bagian */
+  .section h3 {
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
   }
 
-  #loginBox h2 {
-    margin-top: 0;
-    text-align: center;
-    color: #333;
-  }
-
-  #loginBox input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-
-  #loginBox button {
-    width: 100%;
-    padding: 10px;
-    background-color: #ff6f91;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-
-  #loginBox button:hover {
-    background-color: #ff3b6b;
-  }
-
-  /* Galeri container, awalnya tersembunyi */
-  #galleryContainer {
-    display: none; /* tampilkan setelah login berhasil */
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-
-  /* Galeri foto */
-  .gallery {
+  /* Daftar foto dan video */
+  .photos, .videos {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-    max-width: 1000px;
+    gap: 10px;
   }
 
+  /* Style item foto */
   .photo {
-    position: relative;
-    width: 200px;
-    height: 300px;
-    overflow: hidden;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
   }
-
-  .photo:hover {
-    transform: scale(1.05);
-    box-shadow: 0 16px 24px rgba(0,0,0,0.4);
-  }
-
   .photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: filter 0.3s;
+    width: 150px;
+    height: auto;
+    border-radius: 4px;
+    transition: transform 0.2s;
+  }
+  .photo img:hover {
+    transform: scale(1.05);
   }
 
-  /* Overlay besar untuk foto */
+  /* Style item video */
+  .video {
+    cursor: pointer;
+    width: 150px;
+  }
+  .video video {
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  /* Overlay besar */
   .overlay {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0,0,0,0.8);
     display: none;
-    align-items: center;
     justify-content: center;
-    z-index: 999;
+    align-items: center;
+    z-index: 9999;
+    flex-direction: column;
   }
 
-  .overlay img {
-    max-width: 90%;
-    max-height: 80%;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    animation: zoomIn 0.5s;
-  }
-
-  @keyframes zoomIn {
-    from {transform: scale(0.8);}
-    to {transform: scale(1);}
-  }
-
-  /* Tombol close foto besar */
+  /* Tombol tutup overlay */
   .close-btn {
     position: absolute;
-    top: 40px;
-    right: 40px;
-    font-size: 2em;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
     color: #fff;
     cursor: pointer;
-    user-select: none;
-    transition: color 0.3s;
+    z-index: 10000;
   }
 
-  .close-btn:hover {
-    color: #ffd700;
+  /* Media besar di overlay */
+  #largeMedia {
+    max-width: 80%;
+    max-height: 80%;
+    display: none;
+  }
+
+  #largeVideo {
+    max-width: 80%;
+    max-height: 80%;
+    display: none;
   }
 </style>
 </head>
 <body>
 
-<!-- Overlay login -->
-<div id="loginOverlay">
-  <div id="loginBox">
-    <h2>Login dulu ya Cantik</h2>
-    <input type="text" id="username" placeholder="Username" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button id="loginBtn">Login</button>
+<div class="container">
+  <h2>Galeri Foto dan Video</h2>
+
+  <!-- Bagian Foto -->
+  <div class="section" id="foto-section">
+    <h3>Foto</h3>
+    <div class="photos" id="photos">
+      <!-- Contoh foto -->
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.1&auto=format&fit=crop&w=600&q=80" 
+             alt="Foto 1"/>
+      </div>
+      <div class="photo">
+        <img src="https://images.unsplash.com/photo-1493244040629-496f6d136cc3?ixlib=rb-4.0.1&auto=format&fit=crop&w=600&q=80" 
+             alt="Foto 2"/>
+      </div>
+      <!-- Tambahkan foto lain sesuai kebutuhan -->
+    </div>
+  </div>
+
+  <!-- Pemisah antara foto dan video -->
+  <hr style="margin: 40px 0; border: none; border-top: 3px solid #ccc;"/>
+
+  <!-- Bagian Video -->
+  <div class="section" id="video-section">
+    <h3>Video</h3>
+    <div class="videos" id="videos">
+      <!-- Contoh video -->
+      <div class="video">
+        <video controls poster="https://via.placeholder.com/150x100.png?text=Video+1" data-video-src="https://www.w3schools.com/html/mov_bbb.mp4">
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+          Browser Anda tidak mendukung tag video.
+        </video>
+      </div>
+      <div class="video">
+        <video controls poster="https://via.placeholder.com/150x100.png?text=Video+2" data-video-src="https://www.w3schools.com/html/movie.mp4">
+          <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4" />
+          Browser Anda tidak mendukung tag video.
+        </video>
+      </div>
+      <!-- Tambahkan video lain sesuai kebutuhan -->
+    </div>
   </div>
 </div>
 
-<!-- Kontainer galeri -->
-<div id="galleryContainer">
-  <!-- Judul di tengah atas -->
-  <h1>Galeri Cinta</h1>
-  <!-- Galeri foto -->
-  <div class="gallery" id="gallery">
-    <!-- Contoh foto -->
-    <div class="photo"><img src="foto1.jpeg" alt="Foto 1"/></div>
-    <div class="photo"><img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 2"/></div>
-    <div class="photo"><img src="https://images.unsplash.com/photo-1502327030244-3b7680b7d5b8?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 3"/></div>
-    <div class="photo"><img src="https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.1&auto=format&fit=crop&w=800&q=80" alt="Foto 4"/></div>
-    <!-- Tambahkan foto lainnya sesuai keinginan -->
-  </div>
-</div>
-
-<!-- Overlay foto besar -->
+<!-- Overlay besar untuk menampilkan gambar/video besar -->
 <div class="overlay" id="overlay">
   <span class="close-btn" id="closeBtn">&times;</span>
-  <img src="" alt="Large Photo" id="largePhoto"/>
+  <img src="" alt="Large Photo" id="largeMedia"/>
+  <video controls style="display:none;" id="largeVideo"></video>
 </div>
 
 <script>
-  // Cek login
-  const loginOverlay = document.getElementById('loginOverlay');
-  const galleryContainer = document.getElementById('galleryContainer');
-
-  document.getElementById('loginBtn').addEventListener('click', () => {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    // Validasi login sederhana
-    if (username === 'della' && password === 'aldi') {
-      loginOverlay.style.display = 'none';
-      galleryContainer.style.display = 'flex';
-    } else {
-      alert('Username atau password salah!');
-    }
-  });
-
-  // Fungsi untuk menampilkan foto besar
-  const galleryItems = document.querySelectorAll('.photo');
+  // Pilih semua gambar dan video
+  const mediaItems = document.querySelectorAll('.photo img, .video video');
   const overlay = document.getElementById('overlay');
-  const largePhoto = document.getElementById('largePhoto');
+  const largePhoto = document.getElementById('largeMedia');
+  const largeVideo = document.getElementById('largeVideo');
   const closeBtn = document.getElementById('closeBtn');
 
-  galleryItems.forEach(item => {
+  mediaItems.forEach(item => {
     item.addEventListener('click', () => {
-      const imgSrc = item.querySelector('img').src;
-      largePhoto.src = imgSrc;
+      // Jika gambar
+      if (item.tagName.toLowerCase() === 'img') {
+        largePhoto.src = item.src;
+        largePhoto.style.display = 'block';
+        largeVideo.style.display = 'none';
+        largeVideo.pause();
+      }
+      // Jika video
+      if (item.tagName.toLowerCase() === 'video') {
+        const src = item.getAttribute('data-video-src');
+        largeVideo.src = src;
+        largeVideo.style.display = 'block';
+        largePhoto.style.display = 'none';
+        largeVideo.play();
+      }
       overlay.style.display = 'flex';
     });
   });
 
-  // Tutup overlay foto besar
-  closeBtn.addEventListener('click', () => {
+  // Tutup overlay
+  document.getElementById('closeBtn').addEventListener('click', () => {
     overlay.style.display = 'none';
+    largeVideo.pause();
   });
-
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
       overlay.style.display = 'none';
+      largeVideo.pause();
     }
   });
 </script>
